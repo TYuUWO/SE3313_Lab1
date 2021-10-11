@@ -64,7 +64,7 @@ int main() {
 		cout << "this is the parent thread \n";
 		children.push_back(createChild(userData));
 		printf("Child with ForkID %d\n",children [i-1]);
-		cout << i;
+		cout << i << endl;
 		//createFile("FileNo" + i);
 		}
 	for (int j=0; j<children.size(); j++){
