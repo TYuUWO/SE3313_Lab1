@@ -2,7 +2,6 @@
 #include <fstream>
 #include <unistd.h>
 #include <stdlib.h>
-#include <vector>
 #include <chrono>
 #include <thread>
 
@@ -14,45 +13,36 @@ int createFile(string fileName) { //This should just create the file
 	return 0;
 }
 
+int writeToFile(string userData) {
+	sleep(1);
+	//Can you put code that writes to a file here 
+	return 0;
+}
+
 pid_t createChild(){
-	pid_t childPid = fork(const char* program, char** arg_list);
+	pid_t childPid = fork();
 	if(childPid < 0){
 		perror("Fork Failed");
 		exit(EXIT_FAILURE);
 	}
-	else if (ch_pid > 0) {
-        	cout << "spawn child with pid - " << ch_pid << endl;
-        	return ch_pid;
-    	} else {
-       		execve(program, arg_list, nullptr);
-        	perror("execve");
-        	exit(EXIT_FAILURE);
-    	}
+	else{
+		printf("Child with pid %d\n",(int)getpid());
+		return childPid;
+	}
 }
 
 int main() {
-	string program_name ("ChildThread.cpp");
-	string fileName;
 	string userData;
-	char *arg_list[] = {program_name.data(), fileName, userData, nullptr};
-	if (!exists(program_name)){
-        	cout << "Program file 'child' does not exist in current directory!\n";
-        	exit(EXIT_FAILURE);
-    	}
 	int i = 0;
-	vector<int> children;
-    	children.reserve(5); //start with a vector of size 5; size will increase when needed on its own
+	int childern [5] = {};
 	while(userData != "Done"){ //If its finite it would terminate at 5
+		i++;
 		cout << "Type something below. Type \"Done\" to exit."<< endl;
 		cin >> userData;
-		childern.push_back(createChild(program_name.c_str, arg_list));
-		printf("Child with ForkID %d\n", childern[i]);
+		childern [i -1] = createChild();
+		printf("Child with ForkID %d\n",childern [i-1]);
+		cout << i;
 		createFile("FileNo" + i);
-		i++;
-		printf("There is %d array element(s)",i);
 		}
-	for (int i = 0; i < children.size(); ++i) {
-        	kill(children[i], SIGTERM); //kill all child threads
-   	}
 	return EXIT_SUCCESS;
 	}
