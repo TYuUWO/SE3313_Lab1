@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 #include <signal.h>
+#include <algorithm>
 
 using namespace std;
 namespace{
@@ -24,7 +25,9 @@ void Exit(int signalNumber){
 
 pid_t createChild(string userData){
 	pid_t childPid = fork();
-	if (userData == "Done"){
+	string testDone = userData;
+	std::transform(testDone.begin(), testDone.end(), testDone.begin(), ::tolower);
+	if (testDone == "done"){
 		exit(EXIT_SUCCESS);
 	}
 	if(childPid < 0){
@@ -57,7 +60,9 @@ int main() {
 	int i = 0;
 	vector<int> children;
 	children.reserve(5);
-	while(userData != "Done"){ //If its finite it would terminate at 5
+	string testDone = userData;
+	while(userData != "done"){ //If its finite it would terminate at 5
+	std::transform(testDone.begin(), testDone.end(), testDone.begin(), ::tolower);
 		i++;
 		cout << "Type something below. Type \"Done\" to exit."<< endl;
 		cin >> userData;
