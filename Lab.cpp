@@ -2,6 +2,7 @@
 #include <fstream>
 #include <unistd.h>
 #include <stdlib.h>
+#include <vector>
 #include <chrono>
 #include <thread>
 
@@ -25,24 +26,34 @@ pid_t createChild(){
 		perror("Fork Failed");
 		exit(EXIT_FAILURE);
 	}
-	else{
-		printf("Child with pid %d\n",(int)getpid());
-		return childPid;
-	}
+	else if (ch_pid > 0) {
+        	cout << "spawn child with pid - " << ch_pid << endl;
+        	return ch_pid;
+    	} else {
+       		execve(program, arg_list, nullptr);
+        	perror("execve");
+        	exit(EXIT_FAILURE);
+    	}
 }
 
 int main() {
+	string program_name ("ChildThread");
+	if (!exists(program_name)){
+        	cout << "Program file 'child' does not exist in current directory!\n";
+        	exit(EXIT_FAILURE);
+    	}
 	string userData;
 	int i = 0;
-	int childern [5] = {};
+	vector<int> children;
+    	children.reserve(5); //start with a vector of size 5; size will increase when needed on its own
 	while(userData != "Done"){ //If its finite it would terminate at 5
-		i++;
 		cout << "Type something below. Type \"Done\" to exit."<< endl;
 		cin >> userData;
-		childern [i -1] = createChild();
-		printf("Child with ForkID %d\n",childern [i-1]);
-		cout << i;
+		childern [i] = createChild();
+		printf("Child with ForkID %d\n", childern[i]);
 		createFile("FileNo" + i);
+		i++;
+		printf("There is %d array element(s)",i);
 		}
 	return EXIT_SUCCESS;
 	}
