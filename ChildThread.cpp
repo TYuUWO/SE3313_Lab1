@@ -14,8 +14,17 @@ int writeToFile(string userData, string fileName) {
 	//Can you put code that writes to a file here 
 	return 0;
 }
+
+
+volatile sig_atomic_t shutdown_flag = 1;
+
+void GracefulExit(int signal_number)
+{
+    shutdown_flag = 0;
+}
+
 int main(string userData, string fileName){
-  while(true){
+  while(shutdown_flag){
     writeToFile(userData, fileName)
   }
 }
