@@ -25,9 +25,13 @@ pid_t createChild(){
 		perror("Fork Failed");
 		exit(EXIT_FAILURE);
 	}
-	else{
+	else if(childPid > 0){
 		printf("Child with pid %d\n",(int)getpid());
 		return childPid;
+	}
+	else{
+		cout << "printed from child process " << getpid() << endl;
+        	exit(EXIT_SUCCESS);
 	}
 }
 
